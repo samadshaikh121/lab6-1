@@ -16,17 +16,18 @@ import matplotlib.pyplot as plt
 ###############################
 # TODO: Set a variable called stv to 4, this will define 
 #        the weight of the connection from input to output
-# stv = 
 
-dec=0.7 # set weight decrement for habituation
+stv = 4 
+
+dec=1.1 # set weight decrement for habituation
 
 pls=[0, 0, 1, 0, 0] # set up a pulse
 
 # TODO: then create a list of 6 pulses, called x, to use for input
-# x = 
+x = pls*6 +[0]*10 + pls*6
 
 v = stv # Set connection weight to start weight value
-
+forgetflag = True #allows model to simulate process of forgetting the new association
 ###############################
 # Set up and run simulation
 ###############################
@@ -34,18 +35,25 @@ v = stv # Set connection weight to start weight value
 # TODO: Find the length of the input list (x)
 #        and assign its value to a new variable, nTs
 #        (which tracks the number of Time Steps)
-# nTs = 
+nTs = len(x)
 
 # TODO: Create a numpy array named y, a 1D vector
 #        (row vector) padded with zeros, with one
 #        element per each time step
-# y = 
+y = np.zeros((1,nTs))
 
 # TODO: use a for-loop to iterate 
 #        through each time step in 
 #        the input series and calculate
 #        the output at each time step. Ex:
-# for ...
+for t in range(nTs):
+    y[0,t] = v*x[t]
+    
+    if x[t]>0: #some stimulation
+        v *= dec# decrement weight
+        
+    if t>3 and sum(x[t-4:t])==0 and v<stv and forgetflag:
+        v += (stv-v)*0.05
 
 #     then indent 4 spaces and write the equation that
 #     describes how each input value in the vector x is 
